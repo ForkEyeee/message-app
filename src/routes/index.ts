@@ -12,6 +12,16 @@ const messages = [
     added: new Date(),
   },
 ];
+router.post("/new", function (req: any, res: any, next: any) {
+  messages.push({
+    text: req.body.messageText,
+    user: req.body.authorText,
+    added: new Date(),
+  });
+  res.redirect("/");
+  console.log(messages);
+});
+
 /* GET home page. */
 
 router.get("/", function (req: any, res: any, next: any) {
@@ -22,7 +32,8 @@ router.get("/", function (req: any, res: any, next: any) {
 });
 
 router.get("/new", function (req: any, res: any, next: any) {
-  res.render("index", { title: "Express" });
+  res.render("form", { title: "Add New" });
+  console.log(req.body);
 });
 
 module.exports = { router, messages };
