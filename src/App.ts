@@ -10,7 +10,6 @@ const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 
 const app = express();
-
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
@@ -21,8 +20,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "..", "public")));
 console.log("Public directory path:", path.join(__dirname, "..", "public"));
-
-app.use("/", indexRouter);
+// console.log(indexRouter);
+app.use("/", indexRouter.router);
 app.use("/users", usersRouter);
 
 // catch 404 and forward to error handler
