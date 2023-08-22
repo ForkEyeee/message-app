@@ -29,6 +29,7 @@ router.get("/", function (req: any, res: any, next: any) {
     title: "Mini Messageboard",
     messages: messages,
   });
+  console.log(messages);
 });
 
 router.get("/new", function (req: any, res: any, next: any) {
