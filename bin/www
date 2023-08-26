@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var app = require("App.ts");
+var app = require("dist/App.js");
 var debug = require("debug")("message-board:server");
 var http = require("http");
 
