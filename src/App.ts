@@ -1,5 +1,5 @@
 // import React from "react";
-
+require("dotenv").config();
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
@@ -19,8 +19,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "..", "public")));
 console.log("Public directory path:", path.join(__dirname, "..", "public"));
-// console.log(indexRouter);
 app.use("/", indexRouter.router);
+// Set up mongoose connection
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
+
+const mongoDB = process.env.MONGODB_URI || process.env.dev_db_url;
+
+main().catch(err => console.log(err));
+async function main() {
+  await mongoose.connect(mongoDB);
+}
 
 // catch 404 and forward to error handler
 app.use(function (req: any, res: any, next: any) {
