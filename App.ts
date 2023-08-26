@@ -5,6 +5,8 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const compression = require("compression");
+const helmet = require("helmet");
 
 const indexRouter = require("./routes/index");
 
@@ -20,6 +22,26 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "..", "public")));
 console.log("Public directory path:", path.join(__dirname, "..", "public"));
 app.use("/", indexRouter.router);
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      "script-src": ["'self'", "code.jquery.com", "cdn.jsdelivr.net"],
+    },
+  })
+);
+const RateLimit = require("express-rate-limit");
+const limiter = RateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 2000,
+});
+app.use(limiter);
+app.use(compression());
+
+// catch 404 and forward to error handler
+app.use(function (req: any, res: any, next: any) {
+  next(createError(404));
+});
+
 // Set up mongoose connection
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
@@ -30,11 +52,6 @@ main().catch(err => console.log(err));
 async function main() {
   await mongoose.connect(mongoDB);
 }
-
-// catch 404 and forward to error handler
-app.use(function (req: any, res: any, next: any) {
-  next(createError(404));
-});
 
 // error handler
 app.use(function (err: any, req: any, res: any, next: any) {
